@@ -19,6 +19,11 @@ ROOT = Path(__file__).parent
 PKG = json.loads((ROOT / "data" / "call_package.json").read_text(encoding="utf-8"))
 TEMPLATE = (ROOT / "voice_component.html").read_text(encoding="utf-8")
 
+# Vocabulary hints so the live captions spell bank terms correctly
+TRANSCRIBE_HINTS = {
+    "ko": "SC제일은행 강남 WM센터 상담. 박서연 고객님, 김지은 RM, 정기예금, 만기, 재예치, 달러 자산, 지점 방문, 생년월일 육이공삼일오, 아직 못 정했어요, 상담 받고 싶어요.",
+    "en": "SC First Bank call. Ms. Park Seo-yeon, RM Kim Ji-eun, time deposit, maturity, renewal, USD assets, branch visit, undecided, I'd like to talk to my RM, six two zero three one five.",
+}
 MODELS = ["gpt-realtime-2.1", "gpt-realtime-2", "gpt-realtime-mini"]
 VOICES = ["marin", "cedar", "coral", "shimmer", "sage", "alloy", "ash", "ballad", "echo", "verse"]
 
@@ -112,7 +117,7 @@ def mint_token(lang, voice, model, silence_ms):
             "audio": {
                 "input": {
                     "noise_reduction": {"type": "near_field"},
-                    "transcription": {"model": "gpt-4o-mini-transcribe", "language": lang},
+                    "transcription": {"model": "gpt-4o-transcribe", "language": lang, "prompt": TRANSCRIBE_HINTS[lang]},
                     "turn_detection": {
                         "type": "server_vad",
                         "threshold": 0.5,
