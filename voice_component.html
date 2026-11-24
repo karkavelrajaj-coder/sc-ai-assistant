@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<style>
+  :root{--navy:#0b2545;--navy2:#13315c;--teal:#0f8b8d;--teal2:#5fd3d5;--ink:#1d2433;--muted:#6b7385;--line:#e3e7ee;--green:#22a06b;--red:#e5484d}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Segoe UI",system-ui,sans-serif;color:var(--ink);background:transparent}
+  .wrap{display:grid;grid-template-columns:400px 1fr;gap:22px;align-items:stretch;height:690px;padding:4px}
+  @media (max-width:860px){.wrap{grid-template-columns:1fr;height:auto}}
+
+  /* ---------- phone ---------- */
+  .phone{background:linear-gradient(170deg,#173a6a 0%,#0b2545 55%,#081a33 100%);border-radius:34px;color:#fff;display:flex;flex-direction:column;align-items:center;padding:34px 26px 30px;box-shadow:0 8px 18px rgba(11,37,69,.22);position:relative;overflow:hidden}
+  .phone::before{content:"";position:absolute;top:12px;width:90px;height:6px;border-radius:6px;background:rgba(255,255,255,.18)}
+  .brand{font-size:13px;letter-spacing:.5px;opacity:.75;margin-top:8px}
+  .orb{position:relative;width:170px;height:170px;margin:44px 0 26px;display:grid;place-items:center}
+  .orb .core{width:128px;height:128px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#7fe3e4,#0f8b8d 60%,#0b5f61);display:grid;place-items:center;box-shadow:0 0 0 6px rgba(95,211,213,.12);z-index:2;transition:transform .15s}
+  .orb .ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(95,211,213,.55);opacity:0}
+  .orb.speaking .ring{animation:ring 1.6s infinite}
+  .orb.speaking .ring:nth-child(2){animation-delay:.5s}
+  .orb.speaking .ring:nth-child(3){animation-delay:1s}
+  .orb.listening .core{box-shadow:0 0 0 6px rgba(34,160,107,.35)}
+  @keyframes ring{0%{transform:scale(.75);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+  .bars{display:flex;gap:5px;align-items:center;height:44px}
+  .bars i{display:block;width:6px;border-radius:4px;background:#fff;height:10px;opacity:.9;transition:height .1s}
+  .name{font-size:22px;font-weight:700}
+  .sub{font-size:13.5px;opacity:.7;margin-top:4px}
+  .status{margin-top:22px;font-size:15px;font-weight:600;min-height:22px;color:var(--teal2)}
+  .timer{font-size:14px;opacity:.75;margin-top:6px;font-variant-numeric:tabular-nums;min-height:18px}
+  .spacer{flex:1}
+  .controls{display:flex;gap:26px;align-items:center;justify-content:center}
+  .cbtn{width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;background:rgba(255,255,255,.12);color:#fff;transition:transform .1s,background .2s}
+  .cbtn:hover{transform:scale(1.05)}
+  .cbtn:disabled{opacity:.35;cursor:default;transform:none}
+  .cbtn.on{background:#fff;color:var(--navy)}
+  .call{width:78px;height:78px;background:var(--green)}
+  .call.hang{background:var(--red)}
+  .clabel{font-size:11.5px;opacity:.7;text-align:center;margin-top:7px}
+  .cwrap{display:flex;flex-direction:column;align-items:center}
+  svg{width:26px;height:26px}
+  .call svg{width:32px;height:32px}
+
+  /* ---------- side panel ---------- */
+  .side{display:flex;flex-direction:column;gap:14px;min-height:0}
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+  .ctx{display:flex;gap:14px;align-items:center}
+  .ctx .av{width:46px;height:46px;border-radius:50%;background:#eef1f6;display:grid;place-items:center;font-weight:700;color:var(--navy);font-size:18px}
+  .ctx b{font-size:16px}.ctx span{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+  .caps{flex:1;display:flex;flex-direction:column;min-height:0}
+  .caps h4,.sum h4{margin:0 0 10px;font-size:13px;color:var(--muted);font-weight:600;letter-spacing:.3px}
+  .feed{flex:1;overflow-y:auto;padding-right:4px}
+  .ph{color:var(--muted);font-size:14px;text-align:center;margin-top:60px;line-height:1.8}
+  .line{margin:9px 0;display:flex;flex-direction:column}
+  .line .who{font-size:11.5px;color:var(--muted);margin-bottom:3px}
+  .line .tx{font-size:15px;line-height:1.6;padding:9px 13px;border-radius:14px;width:fit-content;max-width:92%;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}
+  .line.ai .tx{background:#eef6f6;border-bottom-left-radius:4px}
+  .line.me{align-items:flex-end}
+  .line.me .tx{background:var(--navy2);color:#fff;border-bottom-right-radius:4px}
+  .line .tx.pend{opacity:.55}
+  .cut{font-size:11px;color:#b83b3b;margin-left:6px}
+  .sum{display:none}
+  .sum .row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid #f1f3f7;font-size:14px}
+  .sum .row span{color:var(--muted)}
+  .sum .badge{display:inline-block;padding:3px 10px;border-radius:12px;background:#e7f5ec;color:#2f855a;font-weight:700;font-size:13px}
+  .sum .badge.warn{background:#fdf4e3;color:#b7791f}.sum .badge.bad{background:#fdecec;color:#c53030}
+  .sum p{margin:10px 0 0;font-size:14px;line-height:1.6;color:#41495a}
+  .msg{font-size:13px;color:#c53030;min-height:0}
+  .admin{font-size:11.5px;color:var(--muted);display:none;gap:10px;align-items:center}
+  .admin input{flex:1;border:1px solid var(--line);border-radius:8px;padding:6px 9px;font:inherit}
+  .admin button{border:0;background:#eef1f6;border-radius:8px;padding:6px 10px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- Phone -->
+  <div class="phone">
+    <div class="brand" id="brand">SC제일은행</div>
+    <div class="orb" id="orb">
+      <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+      <div class="core"><div class="bars" id="bars"><i></i><i></i><i></i><i></i><i></i></div></div>
+    </div>
+    <div class="name" id="agentName">AI 상담 도우미</div>
+    <div class="sub" id="agentSub">강남 WM센터</div>
+    <div class="status" id="status">통화 버튼을 눌러 시작하세요</div>
+    <div class="timer" id="timer"></div>
+    <div class="spacer"></div>
+    <div class="controls">
+      <div class="cwrap"><button class="cbtn" id="btnMute" disabled title="Mute">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+      </button><div class="clabel" id="lblMute">음소거</div></div>
+      <div class="cwrap"><button class="cbtn call" id="btnCall" title="Call">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>
+      </button><div class="clabel" id="lblCall">통화 시작</div></div>
+      <div class="cwrap"><button class="cbtn on" id="btnCaps" title="Captions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 10.5a2 2 0 1 0 0 3M17 10.5a2 2 0 1 0 0 3" stroke-linecap="round"/></svg>
+      </button><div class="clabel">자막</div></div>
+    </div>
+  </div>
+
+  <!-- Side -->
+  <div class="side">
+    <div class="card ctx">
+      <div class="av">박</div>
+      <div><b id="custName">박서연 고객님</b><span id="purpose">정기예금 만기 안내 · RM 상담 예약</span></div>
+    </div>
+    <div class="card caps" id="capsCard">
+      <h4 id="capsTitle">실시간 자막 · Live captions</h4>
+      <div class="feed" id="feed"><div class="ph" id="ph">통화를 시작하면 대화 내용이 여기에 표시됩니다.<br/><span style="font-size:12.5px">The conversation will appear here.</span></div></div>
+      <div class="msg" id="msg"></div>
+      <div class="admin" id="adminBar"><span id="latInfo"></span><input id="txt" placeholder="type…" /><button id="btnSend">send</button></div>
+    </div>
+    <div class="card sum" id="sum"></div>
+  </div>
+</div>
+
+<script>
+const CFG = __CONFIG__;
+const KO = CFG.lang === 'ko';
+const T = KO ? {
+  idle:'통화 버튼을 눌러 시작하세요', connecting:'연결 중…', speaking:'말하는 중…', listening:'듣고 있어요…', thinking:'…',
+  ended:'통화가 종료되었습니다', done:'통화 완료', call:'통화 시작', hang:'통화 종료', mute:'음소거', unmute:'음소거 해제',
+  ai:'AI 상담 도우미', me:'고객님', cut:'· 중단됨', unavailable:'지금은 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.', mic:'마이크 사용을 허용해 주세요.',
+  sumTitle:'통화 요약 · Call summary', outcome:'결과', slot:'예약', intent:'고객 의향', sms:'문자 안내 동의', yes:'예', no:'아니요', dur:'통화 시간'
+} : {
+  idle:'Press the call button to start', connecting:'Connecting…', speaking:'Speaking…', listening:'Listening…', thinking:'…',
+  ended:'Call ended', done:'Call completed', call:'Call', hang:'End call', mute:'Mute', unmute:'Unmute',
+  ai:'AI Assistant', me:'You', cut:'· interrupted', unavailable:'Unable to connect right now. Please try again shortly.', mic:'Please allow microphone access.',
+  sumTitle:'Call summary', outcome:'Outcome', slot:'Booking', intent:'Customer intent', sms:'SMS consent', yes:'Yes', no:'No', dur:'Duration'
+};
+if(!KO){ $('brand').textContent='SC First Bank'; $('agentName').textContent='AI Assistant'; $('agentSub').textContent='Gangnam WM Center'; $('custName').textContent='Ms. Park Seo-yeon'; $('purpose').textContent='Time deposit maturity · RM consultation'; $('capsTitle').textContent='Live captions'; $('ph').innerHTML='The conversation will appear here once the call starts.'; }
+function $(id){ return document.getElementById(id); }
+$('status').textContent = T.idle; $('lblCall').textContent = T.call; $('lblMute').textContent = T.mute;
+if(CFG.admin) $('adminBar').style.display='flex';
+
+let pc=null, dc=null, mic=null, audioEl=null, actx=null, raf=null, t0=null, timerInt=null;
+let aiSpeaking=false, inCall=false, endAfterAudio=false, resultShown=false, speechStopAt=null, waitLat=false;
+const lines={}, lats=[]; let curAi=null;
+
+function setState(s){
+  const orb=$('orb'); orb.className='orb'+(s==='speaking'?' speaking':'')+(s==='listening'?' listening':'');
+  $('status').textContent = T[s] || s;
+}
+function err(m){ $('msg').textContent = m||''; }
+function line(id, who, text, pend){
+  const ph=$('ph'); if(ph) ph.remove();
+  let l=lines[id];
+  if(!l){
+    const d=document.createElement('div'); d.className='line '+who;
+    const w=document.createElement('div'); w.className='who'; w.textContent = who==='ai'?T.ai:T.me;
+    const tx=document.createElement('div'); tx.className='tx';
+    d.appendChild(w); d.appendChild(tx); $('feed').appendChild(d);
+    l=lines[id]={tx, w, text:''};
+  }
+  if(text!==undefined){ l.text=text; l.tx.textContent=text; }
+  l.tx.classList.toggle('pend', !!pend);
+  $('feed').scrollTop = $('feed').scrollHeight;
+  return l;
+}
+function send(ev){ if(dc && dc.readyState==='open') dc.send(JSON.stringify(ev)); }
+
+async function startCall(){
+  err(''); resetView();
+  if(!CFG.token){ err(CFG.admin ? (CFG.token_error||'no session') : T.unavailable); return; }
+  inCall=true; callBtn(true); setState('connecting');
+  try{
+    pc = new RTCPeerConnection();
+    audioEl = document.createElement('audio'); audioEl.autoplay=true; document.body.appendChild(audioEl);
+    pc.ontrack = e => { audioEl.srcObject = e.streams[0]; startOutMeter(e.streams[0]); };
+    try{ mic = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}}); }
+    catch(e){ throw new Error(T.mic); }
+    pc.addTrack(mic.getTracks()[0]);
+    dc = pc.createDataChannel('oai-events');
+    dc.onmessage = e => { try{ onEvent(JSON.parse(e.data)); }catch(x){ console.error(x); } };
+    dc.onopen = () => { send({type:'response.create'}); };
+    const offer = await pc.createOffer(); await pc.setLocalDescription(offer);
+    const r = await fetch(CFG.rtc_url, {method:'POST', body:offer.sdp, headers:{Authorization:'Bearer '+CFG.token,'Content-Type':'application/sdp'}});
+    if(!r.ok){ const t=await r.text(); throw new Error(CFG.admin ? ('('+r.status+') '+t.slice(0,200)) : T.unavailable); }
+    await pc.setRemoteDescription({type:'answer', sdp: await r.text()});
+    t0=Date.now(); timerInt=setInterval(()=>{ const s=Math.round((Date.now()-t0)/1000); $('timer').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; },500);
+    $('btnMute').disabled=false;
+  }catch(e){
+    console.error(e); err(e.message===T.mic?T.mic:(CFG.admin?e.message:T.unavailable)); cleanup(); setState('idle'); callBtn(false);
+  }
+}
+
+function onEvent(ev){
+  switch(ev.type){
+    case 'input_audio_buffer.speech_started':
+      if(aiSpeaking && curAi && lines[curAi] && !lines[curAi].w.querySelector('.cut')){ const s=document.createElement('span'); s.className='cut'; s.textContent=T.cut; lines[curAi].w.appendChild(s); }
+      setState('listening'); line(ev.item_id,'me','…',true); break;
+    case 'input_audio_buffer.speech_stopped':
+      speechStopAt=performance.now(); waitLat=true; setState('thinking'); break;
+    case 'conversation.item.input_audio_transcription.delta': {
+      const l=lines[ev.item_id]||line(ev.item_id,'me','',true); line(ev.item_id,'me',(l.text==='…'?'':l.text)+(ev.delta||''),true); break; }
+    case 'conversation.item.input_audio_transcription.completed':
+      line(ev.item_id,'me',(ev.transcript||'').trim()||'…',false); break;
+    case 'response.output_item.added':
+      if(ev.item && ev.item.type==='message') curAi=ev.item.id; break;
+    case 'response.output_audio_transcript.delta': {
+      curAi=ev.item_id; const l=lines[ev.item_id]||line(ev.item_id,'ai',''); line(ev.item_id,'ai',l.text+(ev.delta||'')); lat(); break; }
+    case 'output_audio_buffer.started':
+      aiSpeaking=true; setState('speaking'); lat(); break;
+    case 'output_audio_buffer.stopped':
+    case 'output_audio_buffer.cleared':
+      aiSpeaking=false; if(endAfterAudio){ setTimeout(endCall,700); } else if(inCall && $('status').textContent!==T.listening) setState('listening'); break;
+    case 'response.function_call_arguments.done':
+      if(ev.name==='save_call_result') onResult(ev); break;
+    case 'error':
+      console.error(ev); if(CFG.admin) err((ev.error&&ev.error.message)||'error'); break;
+  }
+}
+function lat(){
+  if(!waitLat || !speechStopAt) return; waitLat=false;
+  const ms=performance.now()-speechStopAt; if(ms<0||ms>15000) return; lats.push(ms);
+  if(CFG.admin) $('latInfo').textContent=`⚡ ${(ms/1000).toFixed(2)}s · avg ${(lats.reduce((a,b)=>a+b,0)/lats.length/1000).toFixed(2)}s`;
+}
+
+function onResult(ev){
+  let r={}; try{ r=JSON.parse(ev.arguments||'{}'); }catch(e){}
+  send({type:'conversation.item.create', item:{type:'function_call_output', call_id:ev.call_id, output:'{"saved":true}'}});
+  r.duration_sec = t0?Math.round((Date.now()-t0)/1000):null;
+  r.avg_response_sec = lats.length?+(lats.reduce((a,b)=>a+b,0)/lats.length/1000).toFixed(2):null;
+  r.call_id=CFG.call_id; r.customer_id=CFG.customer_id; r.script_id=CFG.script_id;
+  showSummary(r);
+  endAfterAudio=true; if(!aiSpeaking) setTimeout(endCall,2500);
+}
+
+function showSummary(r){
+  resultShown=true;
+  const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const lab=(CFG.labels[r.result_code]||{})[KO?'ko':'en']||r.result_code;
+  const cls=r.result_code==='R1'?'':(['R2','R3','R4'].includes(r.result_code)?'warn':'bad');
+  const s=CFG.slots.find(x=>x.id===r.booked_slot);
+  const slot = s ? (KO?s.ko:s.short) : (r.booked_slot==='OTHER' ? (r.requested_time||'—') : '—');
+  const d=r.duration_sec; const dur = d!=null?`${Math.floor(d/60)}:${String(d%60).padStart(2,'0')}`:'—';
+  let dl='';
+  if(CFG.admin){ const b=new Blob([JSON.stringify(r,null,2)],{type:'application/json'}); dl=`<div style="margin-top:8px;font-size:12px"><a download="${esc(CFG.call_id)}.json" href="${URL.createObjectURL(b)}">result.json</a></div>`; }
+  $('sum').innerHTML = `<h4>${T.sumTitle}</h4>
+    <div class="row"><span>${T.outcome}</span><b><span class="badge ${cls}">${esc(lab)}</span></b></div>
+    <div class="row"><span>${T.slot}</span><b>${esc(slot)}</b></div>
+    <div class="row"><span>${T.sms}</span><b>${r.sms_consent?T.yes:T.no}</b></div>
+    <div class="row"><span>${T.dur}</span><b>${dur}</b></div>
+    <p>${esc(r.summary||r.maturity_intent||'')}</p>${dl}`;
+  $('sum').style.display='block';
+}
+
+function startOutMeter(stream){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const an=actx.createAnalyser(); an.fftSize=256; actx.createMediaStreamSource(stream).connect(an);
+    const data=new Uint8Array(an.frequencyBinCount); const bars=[...document.querySelectorAll('#bars i')];
+    const loop=()=>{ an.getByteFrequencyData(data); bars.forEach((b,i)=>{ const v=data[4+i*6]||0; b.style.height=(10+v/255*34)+'px'; }); raf=requestAnimationFrame(loop); };
+    loop();
+  }catch(e){}
+}
+
+function callBtn(active){
+  const b=$('btnCall'); b.classList.toggle('hang',active); $('lblCall').textContent = active?T.hang:T.call;
+  b.style.transform = active?'rotate(135deg)':'';
+}
+function cleanup(){
+  try{ dc&&dc.close(); }catch(e){} try{ pc&&pc.close(); }catch(e){}
+  if(mic) mic.getTracks().forEach(t=>t.stop()); if(raf) cancelAnimationFrame(raf);
+  document.querySelectorAll('#bars i').forEach(b=>b.style.height='10px');
+  clearInterval(timerInt); pc=null; dc=null; mic=null; inCall=false; aiSpeaking=false; endAfterAudio=false;
+  $('btnMute').disabled=true; $('btnMute').classList.remove('on');
+}
+function endCall(){
+  if(!inCall) return; cleanup(); callBtn(false);
+  setState(resultShown?'done':'ended');
+}
+function resetView(){
+  for(const k in lines) delete lines[k]; lats.length=0; resultShown=false;
+  $('feed').innerHTML=''; $('sum').style.display='none'; $('timer').textContent=''; $('latInfo').textContent='';
+}
+
+$('btnCall').onclick = ()=>{ inCall ? endCall() : startCall(); };
+$('btnMute').onclick = ()=>{ if(!mic) return; const t=mic.getTracks()[0]; t.enabled=!t.enabled; $('btnMute').classList.toggle('on',!t.enabled); $('lblMute').textContent=t.enabled?T.mute:T.unmute; };
+$('btnCaps').onclick = ()=>{ const c=$('capsCard'); const hidden=c.style.visibility==='hidden'; c.style.visibility=hidden?'visible':'hidden'; $('btnCaps').classList.toggle('on',hidden); };
+function sendText(){ const v=$('txt').value.trim(); if(!v||!dc) return; if(aiSpeaking){ send({type:'response.cancel'}); send({type:'output_audio_buffer.clear'}); } line('t'+Date.now(),'me',v); send({type:'conversation.item.create',item:{type:'message',role:'user',content:[{type:'input_text',text:v}]}}); send({type:'response.create'}); speechStopAt=performance.now(); waitLat=true; $('txt').value=''; }
+$('btnSend').onclick=sendText; $('txt').addEventListener('keydown',e=>{ if(e.key==='Enter') sendText(); });
+</script>
+</body>
+</html>

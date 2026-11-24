@@ -1,0 +1,68 @@
+{
+  "call_id": "AICALL-20261102-0001",
+  "script_id": "TM-MAT-01",
+  "note": "All customer information is fictitious demo data (from client PDF 'AI Call Script – Park Seo-yeon – Maturity').",
+  "bank": {
+    "name_en": "SC First Bank",
+    "name_ko": "SC제일은행",
+    "branch_en": "Gangnam WM Center",
+    "branch_ko": "강남 WM센터"
+  },
+  "customer": {
+    "customer_id": "C-WM-20140412",
+    "name_en": "Park Seo-yeon",
+    "name_ko": "박서연",
+    "honorific_en": "Ms. Park",
+    "honorific_ko": "박서연 고객님",
+    "age": 62,
+    "segment": "PB Gold",
+    "tenure_years": 12,
+    "phone": "010-0000-0000",
+    "verification": { "type": "dob_yymmdd", "answer": "620315" },
+    "risk_profile": "Stability-seeking (assessed 2026-03)",
+    "preferred_contact": "In person · mornings (10:00–12:00)",
+    "consents": { "email": true, "sms": true, "telemarketing": false, "do_not_call": false },
+    "aum_krw": 922000000,
+    "family_internal_only": "Spouse Lee Do-hyun (CEO, Hanbit Precision · corporate client), child Lee Seo-jun — NEVER mention during the call"
+  },
+  "rm": {
+    "name_en": "Kim Ji-eun",
+    "name_ko": "김지은",
+    "title": "WM RM",
+    "phone": "02-0000-0000"
+  },
+  "holdings": [
+    { "account": "Deposit ***-12-3401", "product": "Time deposit 12M", "amount": "KRW 300M", "note": "3.40% p.a. · matures 2026-11-04 · target" },
+    { "account": "Deposit ***-12-3401", "product": "Time deposit 24M", "amount": "KRW 180M", "note": "3.20% p.a. · matures 2027-06-12" },
+    { "account": "FX ***-55-0218", "product": "USD deposit", "amount": "$61,200 (KRW 83M)", "note": "4.10% p.a." },
+    { "account": "Trust/Fund ***-71-8820", "product": "3-yr Treasury bond", "amount": "KRW 166M", "note": "" },
+    { "account": "Trust/Fund ***-71-8820", "product": "Global dividend fund", "amount": "KRW 129M", "note": "+6.2% (1 yr)" },
+    { "account": "Pension ***-90-1172", "product": "Pension insurance", "amount": "KRW 64M", "note": "Tax-exempt" },
+    { "account": "Checking ***-01-5530", "product": "Main checking", "amount": "—", "note": "Salary and pension deposits" }
+  ],
+  "recent_contacts": [
+    { "date": "2026-07-28", "type": "Branch visit", "text": "Expressed interest in moving part of the maturity funds into USD assets; agreed to revisit at maturity." },
+    { "date": "2026-09~10", "type": "Campaign", "text": "FX preferential rate campaign — 3 responses to SMS/email (2 clicks, 1 inquiry)." }
+  ],
+  "target_transaction": {
+    "product": "Time deposit 12M",
+    "amount_en": "KRW 300 million",
+    "amount_ko": "3억 원",
+    "maturity_date": "2026-11-04",
+    "maturity_en": "Wednesday, November 4",
+    "maturity_ko": "11월 4일 수요일",
+    "rate": "3.40% p.a.",
+    "renewal_rate": "3.05%",
+    "default_at_maturity": "Principal and interest go to the main checking account"
+  },
+  "slots": [
+    { "id": "S1", "en": "Tuesday, November 3 at 11 AM, in branch (Gangnam WM Center)", "ko": "11월 3일 화요일 오전 11시, 지점 방문(강남 WM센터)", "short": "Tue, Nov 3 · 11 AM in branch" },
+    { "id": "S2", "en": "Wednesday, November 4 at 10 AM, in branch (Gangnam WM Center)", "ko": "11월 4일 수요일 오전 10시, 지점 방문(강남 WM센터)", "short": "Wed, Nov 4 · 10 AM in branch" },
+    { "id": "S3", "en": "Wednesday, November 4 at 11 AM, by phone (RM Kim Ji-eun calls directly)", "ko": "11월 4일 수요일 오전 11시, 전화 상담(김지은 RM이 직접 전화)", "short": "Wed, Nov 4 · 11 AM by phone" }
+  ],
+  "call_rules": {
+    "calling_window_kst": { "start": "10:00", "end": "12:00" },
+    "target_duration_sec": 180,
+    "voice": "Female · calm, clear announcer tone · polite (honorific) Korean"
+  }
+}
