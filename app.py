@@ -24,7 +24,7 @@ TRANSCRIBE_HINTS = {
     "ko": "SC제일은행 강남 WM센터 상담. 박서연 고객님, 김지은 RM, 정기예금, 만기, 재예치, 달러 자산, 지점 방문, 생년월일 육이공삼일오, 아직 못 정했어요, 상담 받고 싶어요.",
     "en": "SC First Bank call. Ms. Park Seo-yeon, RM Kim Ji-eun, time deposit, maturity, renewal, USD assets, branch visit, undecided, I'd like to talk to my RM, six two zero three one five.",
 }
-MODELS = ["gpt-realtime-2.1", "gpt-realtime-2", "gpt-realtime-mini"]
+MODELS = ["gpt-realtime-2.1", "gpt-realtime-2.1-mini", "gpt-realtime-2"]
 VOICES = ["marin", "cedar", "coral", "shimmer", "sage", "alloy", "ash", "ballad", "echo", "verse"]
 
 
@@ -48,11 +48,11 @@ st.set_page_config(
     page_title="SC제일은행 AI 상담 도우미",
     page_icon="📞",
     layout="wide",
-    initial_sidebar_state="expanded" if want_admin else "collapsed",
+    initial_sidebar_state="collapsed",
 )
 
 # Hide all platform chrome for a clean, product-like screen
-hide_sidebar = "" if want_admin else '[data-testid="stSidebar"],[data-testid="stSidebarCollapsedControl"],[data-testid="collapsedControl"]{display:none !important;}'
+hide_sidebar = '[data-testid="stSidebar"],[data-testid="stSidebarCollapsedControl"],[data-testid="collapsedControl"]{display:none !important;}'
 st.markdown(
     f"""<style>
     #MainMenu, header, footer, [data-testid="stToolbar"], [data-testid="stDecoration"], [data-testid="stStatusWidget"],
@@ -94,15 +94,17 @@ voice = secret("VOICE", "marin")
 model = secret("REALTIME_MODEL", MODELS[0])
 silence_ms = 450
 if is_admin:
-    with st.sidebar:
-        st.subheader("Team settings")
-        lang = "ko" if st.radio("Language", ["Korean", "English (rehearsal)"], index=0 if lang == "ko" else 1) == "Korean" else "en"
-        voice = st.selectbox("Voice", VOICES, index=VOICES.index(voice) if voice in VOICES else 0)
-        model = st.selectbox("Model", MODELS, index=MODELS.index(model) if model in MODELS else 0)
-        silence_ms = st.slider("Reply after silence (ms)", 250, 1000, silence_ms, 50)
-        if st.button("New session", use_container_width=True):
+    # Team settings live on the page (not in the sidebar) so they are always reachable
+    with st.expander("⚙️ Team settings (only visible in team mode)", expanded=False):
+        c1, c2, c3, c4 = st.columns([1.2, 1, 1.2, 1.4])
+        lang = "ko" if c1.radio("Language", ["Korean", "English (rehearsal)"], index=0 if lang == "ko" else 1, horizontal=True) == "Korean" else "en"
+        voice = c2.selectbox("Voice", VOICES, index=VOICES.index(voice) if voice in VOICES else 0)
+        model = c3.selectbox("Model", MODELS, index=MODELS.index(model) if model in MODELS else 0)
+        silence_ms = c4.slider("Reply after silence (ms)", 250, 1000, silence_ms, 50)
+        b1, b2 = st.columns([1, 3])
+        if b1.button("New session", use_container_width=True):
             st.session_state.pop("token", None)
-        st.caption("Changing a setting resets the call screen. This panel is only visible at ?admin=1.")
+        b2.caption("Changing a setting resets the call screen. Clients never see this panel.")
 
 
 # ---------------- Session key (server-side; the API key never reaches the browser) ----------------
